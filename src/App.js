@@ -10,43 +10,44 @@ class App extends Component {
   state = {
     currentFriends: friends,
     allFriends: friends,
-    score: 0
+    score: 0,
+    topScore: 0
   };
 
   removeOption = id => {
-
-    let n = this.state.currentFriends.length
-
-    let removedFriendArr = this.state.currentFriends.filter(friend => friend.id !== id);
-
-    let score = 13 - this.state.currentFriends.length
+    let n = this.state.currentFriends.length;
+    let removedFriendArr = this.state.currentFriends.filter(
+      friend => friend.id !== id
+    );
+    let score = 13 - this.state.currentFriends.length;
 
     this.setState({ currentFriends: removedFriendArr }, () => {
-      
-      console.log("score: " + score)
-
       if (removedFriendArr.length === 0) {
-        alert("Wow, top score!")
-        this.setState({ currentFriends: friends, allFriends: friends })
+        alert("Wow, top score!");
+        this.setState({
+          currentFriends: friends,
+          allFriends: friends,
+          topScore: 12
+        });
       }
-
 
       if (removedFriendArr.length === n) {
-        alert("You failed")
-        this.setState({ currentFriends: friends, allFriends: friends })
+        alert("You failed");
+        if (this.state.score > this.state.topScore) {
+          this.setState({ topScore: this.state.score });
+        }
+        this.setState({
+          currentFriends: friends,
+          allFriends: friends,
+          score: 0
+        });
       } else {
-        this.setState({score: score})
+        this.setState({ score: score });
       }
-
     });
-
-
   };
 
-
-
   randomize = () => {
-
     let array = friends;
 
     for (let i = array.length - 1; i > 0; i--) {
@@ -54,34 +55,26 @@ class App extends Component {
       [array[i], array[j]] = [array[j], array[i]];
     }
 
-    this.setState({ allFriends: array })
+    this.setState({ allFriends: array });
+  };
 
-
-  }
-
-  // Map over this.state.friends and render a FriendCard component for each friend object
   render() {
     return (
       <Wrapper>
-        <Title score={this.state.score}>FriendsGame</Title>
-        <div className="container">
+        <Title score={this.state.score} topScore={this.state.topScore}>
+          FriendsGame
+        </Title>
         <div className="row">
-        <div className="col">
-        {this.state.allFriends.map(friend => (
-          <FriendCard
-            removeFriend={this.removeFriend}
-            id={friend.id}
-            key={friend.id}
-            name={friend.name}
-            image={friend.image}
-            occupation={friend.occupation}
-            location={friend.location}
-            randomize={this.randomize}
-            removeOption={this.removeOption}
-          />
-        ))}
-        </div>
-        </div>
+          {this.state.allFriends.map(friend => (
+            <FriendCard
+              id={friend.id}
+              key={friend.id}
+              name={friend.name}
+              image={friend.image}
+              randomize={this.randomize}
+              removeOption={this.removeOption}
+            />
+          ))}
         </div>
       </Wrapper>
     );
