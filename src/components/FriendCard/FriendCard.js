@@ -5,7 +5,7 @@ const FriendCard = props => (
 
 
     <div className="img-container">
-      <img alt={props.name} src={props.image}
+      <img className="img-fluid" alt={props.name} src={props.image}
       onClick={() => {props.removeOption(props.id); props.randomize()}}
       />
     </div>
